@@ -157,7 +157,7 @@ describe("seed", () => {
     });
   });
 
-  describe.skip("articles table", () => {
+  describe("articles table", () => {
     test("articles table exists", () => {
       return db
         .query(

@@ -13,9 +13,12 @@ const db = require("../connection");
 
 const seed = () => {
   return db
-    .query(`DROP TABLE IF EXISTS topics;`)
+    .query(`DROP TABLE IF EXISTS articles;`)
     .then(() => {
       return db.query(`DROP TABLE IF EXISTS users;`);
+    })
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS topics;`);
     })
     .then(() => {
       return db.query(`
@@ -30,6 +33,17 @@ const seed = () => {
           username VARCHAR(50) PRIMARY KEY,
           name VARCHAR(50),
           avatar_url VARCHAR(1000))`);
+    })
+    .then(() => {
+      return db.query(`CREATE TABLE articles (
+          article_id SERIAL PRIMARY KEY,
+          title VARCHAR(50),
+          topic  VARCHAR REFERENCES topics(slug),
+          author VARCHAR REFERENCES users(username),
+          body TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          votes INT DEFAULT 0,
+          article_img_url VARCHAR(1000)  )`);
     });
 };
 
