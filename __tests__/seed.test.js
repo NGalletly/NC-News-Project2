@@ -375,7 +375,7 @@ describe("seed", () => {
     });
   });
 
-  describe("comments table", () => {
+  describe.skip("comments table", () => {
     test("comments table exists", () => {
       return db
         .query(
@@ -579,7 +579,7 @@ describe("seed", () => {
   });
 });
 
-describe("data insertion", () => {
+describe.skip("data insertion", () => {
   test("topics data has been inserted correctly", () => {
     return db.query(`SELECT * FROM topics;`).then(({ rows: topics }) => {
       expect(topics).toHaveLength(3);

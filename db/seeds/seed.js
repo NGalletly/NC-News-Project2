@@ -31,7 +31,7 @@ const seed = function ({ topicData, userData, articleData, commentData }) {
       })
       .then(() => {
         return db.query(`CREATE TABLE articles (
-        article_id INT PRIMARY KEY,
+        article_id SERIAL PRIMARY KEY,
         title VARCHAR(50),
         topic VARCHAR REFERENCES topics(slug),
         author VARCHAR REFERENCES users(username),
@@ -42,19 +42,39 @@ const seed = function ({ topicData, userData, articleData, commentData }) {
       })
       .then(() => {
         return db.query(`CREATE TABLE comments (
-              comment_id INT PRIMARY KEY,
-          article_id INT REFERENCES articles(article_id),
+              comment_id SERIAL PRIMARY KEY,
+          article_id INT REFERENCES articles(article_id) NOT NULL,
           body TEXT,
           votes INT DEFAULT 0,
           author VARCHAR REFERENCES users(username),
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`);
       })
-      //
+      // data insertion
+      // .then(()=>{
+      //   return db.query(`INSERT INTO topics VALUES`)
+      // })
       .then(() => {
-        db.query();
+        const formatData = topicData.map((topic) => {
+          console.log([
+            "topic.slug=",
+            topic.slug,
+            "topic.description=",
+            topic.description,
+            "topic.img_url=",
+            topic.img_url,
+          ]);
+          return [topic.slug, topic.description, topic.img_url];
+        });
+
+        const insertData = format(
+          `INSERT INTO topics (slug, description, img_url) VALUES %L`,
+          formatData,
+        );
+
+        return db.query(insertData);
       })
   );
-};
+}; ////close of function
 
 module.exports = seed;
